@@ -3,7 +3,10 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react",
-    "lib": ["ESNext", "dom"],
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
     "target": "es5",
     "noEmit": true,
     "noImplicitAny": true,
@@ -14,14 +17,10 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
     "strict": true,
-    "types": ["jest", "node"],
-    "paths": {
-      "react-location": ["./packages/react-location"],
-      "react-location-devtools": ["./packages/react-location-devtools"],
-      "react-location-simple-cache": ["./packages/react-location-simple-cache"],
-      "react-location-rank-routes": ["./packages/react-location-rank-routes"]
-    }
+    "types": [
+      "jest",
+      "node"
+    ],
   },
-  "include": ["./packages/*/src/*"]
-  // "exclude": ["./examples", "./test"]
+  "include": ["./src/*", "./tests/*"]
 }

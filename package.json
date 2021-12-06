@@ -1,29 +1,58 @@
 {
-  "private": true,
-  "repository": "https://github.com/tannerlinsley/react-location.git",
-  "scripts": {
-    "i": "yarn install --ignore-engines",
-    "installAll": "lerna exec 'yarn --force'",
-    "linkAll": "lerna exec 'yarn link' && lerna exec 'yarn link react-location'",
-    "unlinkAll": "lerna exec yarn unlink",
-    "test": "lerna run test",
-    "build": "lerna run build",
-    "build:ci": "cd packages/react-location && yarn build && cd ../.. && yarn linkAll && lerna run build",
-    "watch": "lerna run watch --parallel",
-    "prettier": "lerna run prettier",
-    "start": "yarn watch",
-    "format": "lerna run format",
-    "doctoc": "lerna run doctoc",
-    "cipublish": "ts-node scripts/publish.ts"
+  "name": "react-location",
+  "author": "Tanner Linsley",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": "tannerlinsley/react-location",
+  "homepage": "https://react-location.tanstack.com/",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/tannerlinsley"
   },
-  "workspaces": [
-    "./packages/react-location",
-    "./packages/react-location-devtools",
-    "./packages/react-location-simple-cache",
-    "./packages/react-location-rank-routes",
-    "./packages/react-location-jsurl"
+  "description": "",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "dist/react-location.development.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "test": "(is-ci && yarn test:ci) || yarn test:dev",
+    "test:dev": "yarn && yarn test:jest --watch",
+    "test:ci": "yarn && yarn test:jest",
+    "test:coverage": "yarn test:ci; open coverage/lcov-report/index.html",
+    "test:jest": "jest",
+    "build": "yarn format && yarn build:commonjs && yarn build:es && yarn build:umd && yarn build:types",
+    "build:commonjs": "rimraf ./lib && cross-env BABEL_ENV=commonjs babel --extensions .ts,.tsx --ignore ./src/**/tests/**/* ./src --out-dir lib",
+    "build:es": "rimraf ./es && babel --extensions .ts,.tsx --ignore ./src/**/tests/**/* ./src --out-dir es",
+    "build:umd": "rimraf ./dist && cross-env NODE_ENV=production rollup -c && rollup-plugin-visualizer stats-react.json",
+    "build:types": "rimraf ./types && tsc --project ./tsconfig.types.json && replace 'import type' 'import' ./types -r --silent && replace 'export type' 'export' ./types -r --silent",
+    "watch": "yarn watch:commonjs & yarn watch:es & yarn watch:umd & yarn watch:types",
+    "watch:commonjs": "rimraf ./lib && cross-env BABEL_ENV=commonjs babel --watch --extensions .ts,.tsx --ignore ./src/**/tests/**/* ./src --out-dir lib",
+    "watch:es": "rimraf ./es && babel --watch --extensions .ts,.tsx --ignore ./src/**/tests/**/* ./src --out-dir es",
+    "watch:umd": "rimraf ./dist && cross-env NODE_ENV=production rollup -w -c && rollup-plugin-visualizer stats-react.json",
+    "watch:types": "rimraf ./types && tsc --watch --project ./tsconfig.types.json && replace 'import type' 'import' ./types -r --silent && replace 'export type' 'export' ./types -r --silent",
+    "now-build": "yarn && cd www && yarn && yarn build",
+    "prettier": "prettier \"{.,src,src/**,example/src,example/src/**}/*.{md,js,jsx,ts,tsx,json}\"",
+    "start": "yarn watch",
+    "format": "yarn prettier --write",
+    "stats": "open ./stats.html",
+    "doctoc": "doctoc README.md"
+  },
+  "files": [
+    "dist",
+    "src",
+    "lib",
+    "types",
+    "es"
   ],
-  "dependencies": {
+  "browserslist": [
+    "last 2 versions",
+    "> 0.2%"
+  ],
+  "peerDependencies": {
+    "react": ">=16",
+    "react-dom": ">=16"
+  },
+  "devDependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
     "@babel/plugin-transform-runtime": "^7.15.8",
@@ -36,23 +65,14 @@
     "@testing-library/react-hooks": "^7.0.2",
     "@types/react": "^17.0.27",
     "@types/react-dom": "^17.0.9",
-    "@types/semver": "^7.3.9",
     "babel-plugin-const-enum": "^1.1.0",
     "babel-plugin-dev-expression": "^0.2.2",
     "babel-plugin-transform-async-to-promises": "^0.8.15",
-    "conventional-changelog-angular": "^5.0.13",
-    "conventional-recommended-bump": "^6.1.0",
     "cross-env": "^7.0.3",
-    "current-git-branch": "^1.1.0",
     "doctoc": "^2.1.0",
-    "fast-async": "^6.3.8",
-    "git-log-parser": "^1.2.0",
     "is-ci": "^3.0.0",
-    "jsonfile": "^6.1.0",
-    "lerna": "^4.0.0",
-    "parse-commit-message": "^3.2.3",
+    "jest": "^27.3.1",
     "prettier": "^2.4.1",
-    "prompt-confirm": "^2.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-test-renderer": "^17.0.2",
@@ -68,11 +88,14 @@
     "rollup-plugin-size": "^0.2.2",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-visualizer": "^5.5.2",
-    "standard-changelog": "^2.0.27",
-    "stream-to-array": "^2.3.0",
-    "ts-node": "^10.3.0",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"
   },
-  "devDependencies": {}
+  "dependencies": {
+    "@babel/runtime": "^7.15.4",
+    "core-js": "^3.18.3",
+    "fast-async": "7",
+    "history": "^5.0.0",
+    "ts-toolbelt": "^9.6.0"
+  }
 }

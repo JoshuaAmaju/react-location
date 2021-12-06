@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import React from "react";
 import ReactDOM from "react-dom";
+// import {
+//   Link,
+//   MakeGenerics,
+//   Outlet,
+//   ReactLocation,
+//   Router,
+//   useMatch,
+// } from "react-location";
+import axios from "axios";
+
 import {
   Link,
   MakeGenerics,
@@ -8,8 +18,7 @@ import {
   ReactLocation,
   Router,
   useMatch,
-} from "react-location";
-import axios from "axios";
+} from "../../../src";
 
 type PostType = {
   id: string;
